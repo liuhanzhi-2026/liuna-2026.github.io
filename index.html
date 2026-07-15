@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI选号成长档案</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --yellow: #FFC800;
+  --yellow-bg: #FFF9DE;
+  --green: #00BA73;
+  --green-bg: #E6F9F1;
+  --red: #FF4A47;
+  --red-bg: #FFEEED;
+  --orange: #FF8C00;
+  --orange-bg: #FFF3E0;
+  --blue: #4A90D9;
+  --blue-bg: #EBF5FF;
+  --gray: #999;
+  --gray-bg: #F5F5F5;
+  --text: #333;
+  --text-light: #666;
+  --border: #eee;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: #fafafa;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+/* Hero - 参考截图5渐变风格 */
+.hero {
+  background: linear-gradient(135deg, #f8f0ff 0%, #fff5f0 30%, #fff8e8 60%, #f0f8ff 100%);
+  color: #1a1a1a;
+  padding: 80px 0 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -20%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,200,0,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%; right: -10%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,100,100,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 24px;
+  border: 1px solid rgba(0,0,0,0.06);
+  position: relative;
+  z-index: 1;
+}
+.hero-label .play-icon {
+  width: 0; height: 0;
+  border-left: 8px solid #666;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+.hero h1 {
+  font-size: 52px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FFC800 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .subtitle {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 40px;
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+}
+
+/* 首屏数据卡片 */
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+.hero-stat {
+  text-align: center;
+}
+.hero-stat .value {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FFC800 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-stat .label {
+  font-size: 13px;
+  color: #999;
+  margin-top: 8px;
+}
+
+.hero .powered {
+  font-size: 12px;
+  color: #ccc;
+  position: relative;
+  z-index: 1;
+}
+
+/* Section */
+section { padding: 50px 0; border-bottom: 1px solid var(--border); }
+.section-header {
+  margin-bottom: 30px;
+}
+.section-tag {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title .num {
+  background: var(--yellow);
+  color: #1a1a1a;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.section-desc {
+  color: var(--text-light);
+  font-size: 15px;
+  margin-left: 46px;
+}
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-yellow { background: var(--yellow-bg); color: var(--orange); }
+.badge-red { background: var(--red-bg); color: var(--red); }
+.badge-blue { background: var(--blue-bg); color: var(--blue); }
+.badge-gray { background: var(--gray-bg); color: var(--gray); }
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 14px;
+}
+th, td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  background: var(--gray-bg);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-light);
+}
+tr:hover { background: #fafafa; }
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 32px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--border);
+}
+.timeline-item.done::before { background: var(--green); }
+.timeline-item.current::before { background: var(--yellow); }
+.timeline-item.future::before { background: var(--gray); }
+
+.timeline-date {
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 4px;
+}
+.timeline-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.timeline-body {
+  font-size: 14px;
+  color: var(--text-light);
+}
+.timeline-body p { margin-bottom: 8px; }
+
+/* Expandable */
+.expandable {
+  cursor: pointer;
+  user-select: none;
+}
+.expandable .arrow {
+  transition: transform 0.2s;
+  display: inline-block;
+  margin-left: auto;
+  color: #999;
+}
+.expandable.open .arrow {
+  transform: rotate(90deg);
+}
+.expand-content {
+  display: none;
+  margin-top: 12px;
+}
+.expand-content.show { display: block; }
+
+/* Stat cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.stat-card .stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.stat-card .stat-label {
+  font-size: 13px;
+  color: var(--text-light);
+}
+.stat-card .stat-sub {
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 4px;
+}
+
+/* Highlight */
+.highlight {
+  background: var(--yellow-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Comparison */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+.compare-card {
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+.compare-card.ai {
+  background: var(--green-bg);
+  border: 2px solid var(--green);
+}
+.compare-card.human {
+  background: var(--gray-bg);
+  border: 2px solid var(--border);
+}
+.compare-card .compare-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.compare-card .compare-value {
+  font-size: 28px;
+  font-weight: 800;
+}
+.compare-card.ai .compare-value { color: var(--green); }
+.compare-card.human .compare-value { color: var(--gray); }
+
+/* Pipeline */
+.pipeline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.pipeline-step {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+.pipeline-step.active {
+  background: var(--green-bg);
+  border-color: var(--green);
+  color: var(--green);
+}
+.pipeline-arrow {
+  color: var(--gray);
+  font-size: 18px;
+}
+
+/* Role badge */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.role-item {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Funnel */
+.funnel-row {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  gap: 12px;
+}
+.funnel-label {
+  width: 140px;
+  font-size: 13px;
+  color: var(--text-light);
+  text-align: right;
+}
+.funnel-bar-container {
+  flex: 1;
+  background: var(--gray-bg);
+  border-radius: 6px;
+  height: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.funnel-bar {
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  transition: width 0.5s;
+}
+.funnel-bar.ai { background: var(--green); }
+.funnel-bar.human { background: var(--gray); }
+
+/* Learning card */
+.learning-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+  border-left: 4px solid var(--yellow);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.learning-card .learn-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.learning-card .learn-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.learning-card .learn-highlight {
+  background: linear-gradient(135deg, #FFF9DE 0%, #FFF3E0 100%);
+  border: 1px solid var(--yellow);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Note */
+.note {
+  background: var(--blue-bg);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--blue);
+  margin: 12px 0;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* Progress bar */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--gray-bg);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 36px; }
+  .hero-stats { gap: 24px; }
+  .hero-stat .value { font-size: 32px; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .section-title { font-size: 22px; }
+  .funnel-label { width: 100px; font-size: 11px; }
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px 0;
+  color: var(--gray);
+  font-size: 13px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeIn 0.4s ease;
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-label">
+      <span class="play-icon"></span>
+      <span>大模型落地真实故事 · 从验证假设到规模化应用</span>
+    </div>
+    <h1>AI选号<span class="gradient-text">成长档案</span></h1>
+    <p class="subtitle">从"人机一致率"到"效果导向"，一位AI员工的认知迭代</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="value">100%</div>
+        <div class="label">到餐·小红书渠道AI作业</div>
+      </div>
+      <div class="hero-stat">
+        <div class="value">8条</div>
+        <div class="label">业务线定制规则上线</div>
+      </div>
+      <div class="hero-stat">
+        <div class="value">~6亿</div>
+        <div class="label">年覆盖预算</div>
+      </div>
+      <div class="hero-stat">
+        <div class="value">50%</div>
+        <div class="label">其余业务线上岗后AI分流</div>
+      </div>
+    </div>
+    <div class="powered">POWERED BY 市场部内容营销中心 · 美团</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- Section 1: 能力画像 -->
+<section>
+  <div class="section-header">
+    <div class="section-tag">🌟 第一部分</div>
+    <div class="section-title"><span class="num">1</span> 能力画像</div>
+    <div class="section-desc">AI选号不是独立工具，而是内嵌在达人库操作台中的智能筛选能力</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 它是谁</div>
+    <p style="margin-bottom:12px;">运营将「达人内容策略brief」输入给AI，AI理解策略后进行选号。AI承担的不仅是客观、可量化的判断，还包括<strong>规则性的、能被清晰描述的判断</strong>——它带着对业务策略的理解在工作。主观的、依赖个人经验的感性判断仍保留给人工。</p>
+    <p>运营拿到的达人list，已经是经过AI初筛的结果，运营无需再手动逐一核查基础指标。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏗️ 核心能力：两层架构 + 三层筛选</div>
+    <p style="margin-bottom:12px;"><strong>两层架构：</strong></p>
+    <div class="role-grid">
+      <div class="role-item"><span><strong>通用规则层</strong><br><small style="color:#999">全业务线共用基础标准</small></span><span class="badge badge-green">已上线</span></div>
+      <div class="role-item"><span><strong>行业定制层</strong><br><small style="color:#999">各业务线专属筛选条件</small></span><span class="badge badge-green">8线已上线</span></div>
+    </div>
+    <p style="margin:16px 0 12px;"><strong>三层筛选：</strong></p>
+    <div class="pipeline">
+      <div class="pipeline-step active">🚫 淘汰筛查<br><small>一票否决</small></div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step active">📊 匹配度打分<br><small>100分制，>60通过</small></div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step active">🏷️ 标签项<br><small>影响排序（部分业务线）</small></div>
+    </div>
+
+  </div>
+
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">🔌 产品形态：为什么嵌入达人库而不是独立Agent <span class="arrow">▶</span></div>
+    <div class="expand-content">
+      <p style="margin-bottom:12px;">曾考虑过上线类似agent的独立入口——供应商投递，运营接收排名，体感上更AI一些。但评估后认为<strong>形式大于内容</strong>，运营现有工作流已围绕达人库展开，另起炉灶反而增加切换成本。</p>
+      <p>嵌入达人库后：AI筛选的达人带有【AI筛选】角标，运营只需对AI筛选结果进行复审和最终决策。</p>
+    </div>
+  </div>
+
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">📚 规则库建设进展 <span class="arrow">▶</span></div>
+    <div class="expand-content">
+      <p style="margin-bottom:12px;">每套定制规则经历：规则梳理 → workshop快速对齐 → 规则转化 → 上岗测试（2轮）。早期人工一致性验证约4天，现已转为workshop快速对齐。</p>
+      <table>
+        <thead><tr><th>规则类型</th><th>状态</th><th>负责人</th></tr></thead>
+        <tbody>
+          <tr><td>通用版1.0</td><td><span class="badge badge-green">已上线</span></td><td>内容营销各BP</td></tr>
+          <tr><td>到餐定制版</td><td><span class="badge badge-green">已上线</span></td><td>蒋世杰</td></tr>
+          <tr><td>外卖定制版</td><td><span class="badge badge-green">已上线</span></td><td>李飞</td></tr>
+          <tr><td>拼好饭定制版</td><td><span class="badge badge-green">已上线</span></td><td>赵晓晴</td></tr>
+          <tr><td>问小团定制版</td><td><span class="badge badge-green">已上线</span></td><td>李姝婧</td></tr>
+          <tr><td>会员定制版</td><td><span class="badge badge-green">已上线</span></td><td>王迪</td></tr>
+          <tr><td>闪购定制版</td><td><span class="badge badge-green">已上线</span></td><td>尚伟光</td></tr>
+          <tr><td>酒旅定制版</td><td><span class="badge badge-gray">待制定</span></td><td>陈晓龙</td></tr>
+          <tr><td>三医定制版</td><td><span class="badge badge-yellow">md待上线</span></td><td>肖玲</td></tr>
+          <tr><td>烟火小城等</td><td><span class="badge badge-yellow">修改中</span></td><td>杨鑫钰</td></tr>
+          <tr><td>神券定制版</td><td><span class="badge badge-gray">待制定</span></td><td>姚雪怡</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><span>📌</span><span>规则库的复杂度在于多业务线不同规则的并行迭代，每条线有各自的营销场景特点、目标人群和转化路径。</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: 实战检验 -->
+<section>
+  <div class="section-header">
+    <div class="section-tag">🏗 第二部分</div>
+    <div class="section-title"><span class="num">2</span> 实战检验</div>
+    <div class="section-desc">到餐6月整合营销项目（端午&夜宵&菌子节），AI与人工的真实AB实验</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚖️ 实验设计</div>
+    <div class="compare-grid">
+      <div class="compare-card ai">
+        <div class="compare-label">🤖 AI组</div>
+        <div class="compare-value">20%</div>
+        <div style="font-size:13px;color:#666">预算&账号，AI独立完成全流程</div>
+      </div>
+      <div class="compare-card human">
+        <div class="compare-label">👤 人工组</div>
+        <div class="compare-value">80%</div>
+        <div style="font-size:13px;color:#999">预算&账号，人工按常规流程</div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:#999;text-align:center;margin-top:12px;">分流方式：内容方向×价格号段多维度分层，兼顾账号数量、价格区间、内容方向的均匀分布</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📈 核心转化指标</div>
+    <div class="stats-grid">
+      <div class="stat-card" style="border:2px solid var(--green);">
+        <div class="stat-value" style="color:var(--green);">¥3.88</div>
+        <div class="stat-label">AI组订单成本</div>
+        <div class="stat-sub">低于目标38% ✅</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--gray);">¥5.84</div>
+        <div class="stat-label">人工组订单成本</div>
+        <div class="stat-sub">高于目标62%</div>
+      </div>
+      <div class="stat-card" style="border:2px solid var(--green);">
+        <div class="stat-value" style="color:var(--green);">+56%</div>
+        <div class="stat-label">AI组人均交易订单量</div>
+        <div class="stat-sub">高于人工组</div>
+      </div>
+    </div>
+    <p style="font-size:14px;color:#666;">AI组在人均成本仅高出3.9%的前提下，人均交易订单量高于人工组56%。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 阅读转化漏斗对比</div>
+    <p style="font-size:13px;color:#999;margin-bottom:12px;">两组人均曝光基本持平（253K vs 254K），差异主要体现在转化效率</p>
+
+    <div style="margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px;">🤖 AI组</div>
+      <div class="funnel-row"><div class="funnel-label">曝光→阅读</div><div class="funnel-bar-container"><div class="funnel-bar ai" style="width:62%;">18.67%</div></div></div>
+      <div class="funnel-row"><div class="funnel-label">阅读→意向UV</div><div class="funnel-bar-container"><div class="funnel-bar ai" style="width:80%;">48.12%</div></div></div>
+      <div class="funnel-row"><div class="funnel-label">意向→交易</div><div class="funnel-bar-container"><div class="funnel-bar ai" style="width:16%;">9.54%</div></div></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px;">👤 人工组</div>
+      <div class="funnel-row"><div class="funnel-label">曝光→阅读</div><div class="funnel-bar-container"><div class="funnel-bar human" style="width:50%;">15.18%</div></div></div>
+      <div class="funnel-row"><div class="funnel-label">阅读→意向UV</div><div class="funnel-bar-container"><div class="funnel-bar human" style="width:64%;">38.66%</div></div></div>
+      <div class="funnel-row"><div class="funnel-label">意向→交易</div><div class="funnel-bar-container"><div class="funnel-bar human" style="width:15%;">9.26%</div></div></div>
+    </div>
+    <p style="font-size:14px;color:#666;margin-top:12px;">AI组人均阅读量高22.8%，人均意向UV高53%。"曝光→阅读→种草"转化链路效率更高。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 达人质量结构</div>
+    <table>
+      <thead><tr><th>达人类型</th><th>AI组（16人）</th><th>AI占比</th><th>人工组（56人）</th><th>人工占比</th></tr></thead>
+      <tbody>
+        <tr><td>明星达人（最优）</td><td>5人</td><td>31.2%</td><td>10人</td><td>17.9%</td></tr>
+        <tr><td>精准触达型</td><td>7人</td><td>43.8%</td><td>14人</td><td>25.0%</td></tr>
+        <tr><td>曝光型（资讯号）</td><td>2人</td><td>12.5%</td><td>19人</td><td>33.9%</td></tr>
+        <tr><td>无效达人</td><td>2人</td><td>12.5%</td><td>13人</td><td>23.2%</td></tr>
+        <tr style="font-weight:700;background:var(--green-bg);"><td>高业务价值达人合计</td><td>12人</td><td>75%</td><td>24人</td><td>43%</td></tr>
+      </tbody>
+    </table>
+    <div class="note"><span>💡</span><span>我们想要的状态是「兜住下限，激发上限」。AI在兜住下限上颇具优势——无效达人比例更低，下限稳定，不会因评审人不同而浮动。</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔍 效果差异的原因分析</div>
+    <p style="margin-bottom:16px;"><strong>原因一：内容方向匹配执行更严格</strong></p>
+    <p style="margin-bottom:16px;">AI组美食/旅游类内容达人占比88%，人工组仅66%。同样是vlog博主，旅游美食场景与泛日常生活场景在到餐转化上差距明显。人工判断标准因人而异，弹性更大；AI规则执行一致，不会因评审人不同而浮动。</p>
+    <p style="margin-bottom:16px;"><strong>原因二：多要素并行决策能力更强</strong></p>
+    <p>AI组商单占比32.8%，人工组41.4%。人工在判断中并非有意"通融"，而是没办法做到多要素并行决策——容易被某一突出信息（如粉丝量大、某条内容好看）吸引注意力，从而忽略其他维度的扣分项。AI并不是没有弹性，而是更适合做多要素并行处理，能同时权衡内容方向、商单占比、成本效益、粉丝画像等多个维度。</p>
+  </div>
+
+  <div class="card expandable" onclick="toggleExpand(this)">
+    <div class="card-title">👁️ 观察点：资讯号表现（待验证） <span class="arrow">▶</span></div>
+    <div class="expand-content">
+      <p>资讯号阅读→意向UV转化率仅5.96%，同等预算下产生的到餐意向UV和GTV约为明星达人的1/12。</p>
+      <div class="note" style="background:var(--yellow-bg);color:var(--orange);">
+        <span>⚠️</span>
+        <span>本次资讯号样本量有限（AI组2个、人工组19个），三个子项目目标人群和转化路径可能不同。这一观察可能不够置信，需在更多项目、更大样本量下进一步验证。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📝 基于实验数据的规则迭代方向</div>
+    <table>
+      <thead><tr><th>维度</th><th>新增规则</th><th>数据依据</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-blue">评分项</span></td><td>搜索页流量占比 > 8%</td><td>明星达人搜索占比10%，是精准触达型的3.4倍</td></tr>
+        <tr><td><span class="badge badge-blue">评分项</span></td><td>商单占比阈值下调至40%</td><td>优秀达人平均商单29.5%，其他41.9%</td></tr>
+        <tr><td><span class="badge badge-green">加分项</span></td><td>互动率 > 8%</td><td>精准触达型互动率8.5%，阅读→意向转化64%</td></tr>
+        <tr><td><span class="badge badge-red">扣分项</span></td><td>规避"情感/娱乐占比高"</td><td>无效达人共同特征：泛情感/娱乐，缺消费场景</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Section 3: 进化历程 -->
+<section>
+  <div class="section-header">
+    <div class="section-tag">🤝 第三部分</div>
+    <div class="section-title"><span class="num">3</span> 进化历程</div>
+    <div class="section-desc">从"验证假设"到"效果导向"的认知迭代，5个关键节点</div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item done">
+      <div class="timeline-date">3月底 · 第一阶段</div>
+      <div class="timeline-title">🎯 设定"人机一致率"目标</div>
+      <div class="timeline-body">
+        <p>设计测评方案：163个达人分为AI组85个和人工组78个，预设"人机一致率"目标80%。</p>
+        <p>假设：人工选号标准相对稳定，AI应向人工看齐。并非不知道人不是标准答案，但认为人的判断在可接受范围内波动，80%一致率已预留了20%的空间给人不能达成一致的部分。</p>
+      </div>
+    </div>
+
+    <div class="timeline-item done">
+      <div class="timeline-date">4月初 · 第二阶段</div>
+      <div class="timeline-title">😱 人的分歧程度远超预期</div>
+      <div class="timeline-body">
+        <p>3名评审对85位达人独立评审，内部一致率仅<strong>31.8%</strong>，离假设的80%差了很多。</p>
+        <p>分歧类型：成本指标核查遗漏、内容方向判断标准不统一、打分基准系统性偏高……</p>
+        <p>这加深了认识：人的分歧程度大到远超预期，"人机一致率"指标失去实际意义。让AI模仿一个不一致的标准，本质上是在复制人的随机性。</p>
+      </div>
+    </div>
+
+    <div class="timeline-item done">
+      <div class="timeline-date">4月-5月 · 第三阶段</div>
+      <div class="timeline-title">🔄 转向"效果导向"验证</div>
+      <div class="timeline-body">
+        <p>易生活教育项目第一次AB实验，放弃"人机一致率"，改为直接对比投放效果。虽因执行偏差未得置信结论，但获得重要认知：好内容有规律可循，而选达人本身就是基于账号以往内容的判断，运营是搬运工不是生产者。</p>
+        <p>明确核心方向：建立"复盘→沉淀规则→应用→验证"的完整循环，基于投放数据和业务营销场景变化驱动规则迭代。</p>
+      </div>
+    </div>
+
+    <div class="timeline-item done">
+      <div class="timeline-date">5月-6月 · 第四阶段</div>
+      <div class="timeline-title">⚙️ 常态化改造与规则库建设</div>
+      <div class="timeline-body">
+        <p>达人库改造支持常态化测试：供应商提报后随机分流（内容方向×价格号段多维度分层）、AI选号部分BP/PM不可干预、前端标记AI筛选达人、数据字段区分全部/自然流量。</p>
+        <p>系统建设业务线定制规则库，从通用版1.0逐步扩展。</p>
+      </div>
+    </div>
+
+    <div class="timeline-item current">
+      <div class="timeline-date">6月-7月 · 第五阶段</div>
+      <div class="timeline-title">🚀 到餐项目验证与规模化应用</div>
+      <div class="timeline-body">
+        <p>到餐6月整合营销实验结果验证了AI选号效果优于人工。</p>
+        <p><strong>到餐项目小红书渠道100%由AI员工作业，其余业务线上岗后50%由AI作业。</strong></p>
+        <p>AI选号从"实验验证"进入"规模化应用"阶段。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4: 关键learning -->
+<section>
+  <div class="section-header">
+    <div class="section-tag">💡 第四部分</div>
+    <div class="section-title"><span class="num">4</span> 关键learning</div>
+    <div class="section-desc">三个关键认知，决定下一步方向</div>
+  </div>
+
+  <div class="learning-card">
+    <div class="learn-icon">🌱</div>
+    <div class="learn-title">learning01：选号好坏从源头就决定了</div>
+    <p style="margin-bottom:12px;">当前模式下达人由供应商提报，AI和人工都是在提报池子里筛选。如果提报质量不高，AI和人工的上限都被锁死。</p>
+    <p style="margin-bottom:12px;">短期：每次复盘总结→影响下次提报；当运营觉得没有合适的、或AI评分都不高时，需要push供应商再次提报。</p>
+    <div class="learn-highlight">
+      🎯 长期建设方向：「达人广场」<br>
+      <span style="font-weight:400;font-size:14px;">拓展从更大池子里选人的能力。当前约20名运营参与选号，合计80pd/月，但选号范围受限于供应商提报。下一步探索AI直接从更广泛达人池中主动筛选，建设「达人广场」能力，打破供应商提报的天花板。</span>
+    </div>
+  </div>
+
+  <div class="learning-card">
+    <div class="learn-icon">🔄</div>
+    <div class="learn-title">learning02：规则迭代需要复盘数据驱动</div>
+    <p style="margin-bottom:12px;">把规则迭代的驱动力从"人的主观判断"切换为"客观投放数据+业务营销场景变化的客观需求"。循环：人输入规则→实际跑→回收数据→细致复盘→沉淀认知→迭代规则→下一次验证。</p>
+    <p style="margin-bottom:8px;"><strong>有效复盘回流，进行规则迭代</strong>，人受限于精力无法逐篇分析，目前多由供应商进行。</p>
+    <div class="pipeline" style="margin-top:12px;">
+      <div class="pipeline-step active" style="background:var(--green-bg);border-color:var(--green);color:var(--green);">当前在跑<br><small>人定规则→AI执行→投放<br>→回收数据→人复盘→迭代</small></div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step" style="background:var(--yellow-bg);border-color:var(--orange);color:var(--orange);">后续目标<br><small>复盘agent自动内容复盘<br>自动识别共性特征<br>自动产出优化建议</small></div>
+    </div>
+    <div class="learn-highlight">
+      🎯 长期建设方向：「复盘agent及复盘数据回流」<br>
+      <span style="font-weight:400;font-size:14px;">人从"执行者+复盘者"转变为"规则审核者+方向把控者"，AI从"执行者"升级到"执行者+复盘者"，整个循环从完全依靠人走向端到端。建设复盘agent，实现规则迭代的端到端闭环。</span>
+    </div>
+  </div>
+
+  <div class="learning-card">
+    <div class="learn-icon">🤝</div>
+    <div class="learn-title">learning03：AI选号与AI审核的能力握手</div>
+    <p>从"选对人"延伸到"做对内容方向"是自然的下一步。选号和内容审核两个AI能力需要打通，形成闭环——保证选对人后，在内容审核阶段也能识别有效模式，指导达人产出更匹配业务需求的内容。目前选号环节已初步跑通，内容审核环节的AI能力也初步应用，两者的握手将是下一个阶段的重点课题。</p>
+  </div>
+</section>
+
+<!-- Section 5: 下一步 -->
+<section>
+  <div class="section-header">
+    <div class="section-tag">🚀 尾声与展望</div>
+    <div class="section-title"><span class="num">5</span> 下一步</div>
+    <div class="section-desc">下一步节奏</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📍 分流推进</div>
+    <div class="stats-grid">
+      <div class="stat-card" style="border:2px solid var(--green);">
+        <div class="stat-value" style="color:var(--green);">100%</div>
+        <div class="stat-label">到餐·小红书渠道</div>
+        <div class="stat-sub">已实现AI作业 ✅</div>
+      </div>
+      <div class="stat-card" style="border:2px solid var(--orange);">
+        <div class="stat-value" style="color:var(--orange);">50%</div>
+        <div class="stat-label">其余业务线</div>
+        <div class="stat-sub">上岗后执行 🟡</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📚 规则库持续建设</div>
+    <p style="margin-bottom:12px;">酒旅、神券规则待制定，三医md版本待上线，烟火小城等修改分值中。多业务线不同规则的并行迭代是常态。</p>
+    <div class="progress-bar"><div class="progress-fill" style="width:58%;background:var(--green);"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:#999;">
+      <span>已上线 7/12</span>
+      <span>进行中 3/12</span>
+      <span>待启动 2/12</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚀 长期能力拓展</div>
+    <div class="role-grid">
+      <div class="role-item" style="flex-direction:column;align-items:flex-start;">
+        <strong>1️⃣ 突破供应商提报限制</strong>
+        <small style="color:#999;margin-top:4px;">探索AI直接从更广泛达人池中主动筛选</small>
+      </div>
+      <div class="role-item" style="flex-direction:column;align-items:flex-start;">
+        <strong>2️⃣ 复盘数据回流</strong>
+        <small style="color:#999;margin-top:4px;">实现规则迭代的端到端闭环</small>
+      </div>
+      <div class="role-item" style="flex-direction:column;align-items:flex-start;">
+        <strong>3️⃣ AI选号与AI审核握手</strong>
+        <small style="color:#999;margin-top:4px;">从选对人延伸到做对内容方向</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <p>AI选号成长档案 · 市场部内容营销中心 · 2026</p>
+</div>
+
+</div>
+
+<script>
+function toggleExpand(el) {
+  el.classList.toggle('open');
+  var content = el.querySelector('.expand-content');
+  if (content) {
+    content.classList.toggle('show');
+    if (content.classList.contains('show')) {
+      content.classList.add('fade-in');
+    }
+  }
+}
+
+// Animate funnel bars on load
+window.addEventListener('load', function() {
+  var bars = document.querySelectorAll('.funnel-bar');
+  bars.forEach(function(bar) {
+    var width = bar.style.width;
+    bar.style.width = '0';
+    setTimeout(function() {
+      bar.style.width = width;
+    }, 100);
+  });
+});
+</script>
+
+</body>
+</html>
