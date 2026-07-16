@@ -705,31 +705,61 @@ tr:hover { background: #fafafa; }
 
   <div class="card">
     <div class="card-title">🎯 达人质量结构</div>
-    <p style="margin-bottom:16px;color:#666;font-size:14px;">本次实验沿用达人筛选的四象限分类标准（参考<a href="https://km.sankuai.com/collabpage/2772054152" target="_blank" style="color:var(--blue);">《AI选号实验复盘》</a>），以CPM（传播效率）和ROI（业务转化）两个维度划分达人：</p>
-    <div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:8px;margin-bottom:8px;align-items:center;">
-      <div></div>
-      <div style="text-align:center;font-size:13px;color:#666;font-weight:600;padding:8px 0;">低CPM（≤57.6）<br><span style="font-weight:400;font-size:12px;">传播效率高</span></div>
-      <div style="text-align:center;font-size:13px;color:#666;font-weight:600;padding:8px 0;">高CPM（＞57.6）<br><span style="font-weight:400;font-size:12px;">传播效率低</span></div>
-    </div>
-    <div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:8px;margin-bottom:12px;">
-      <div style="display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;color:#666;font-weight:600;">高ROI<br>（≥9.1）<br><span style="font-weight:400;font-size:12px;">转化效率高</span></div>
-      <div style="background:var(--green-bg);border-radius:12px;padding:16px;border-left:4px solid var(--green);">
-        <div style="font-weight:700;color:var(--green);font-size:15px;margin-bottom:6px;">⭐ 明星达人</div>
-        <div style="font-size:13px;color:#333;line-height:1.6;">传播效率高 × 转化效率高<br>两者兼顾的理想达人</div>
+    <p style="margin-bottom:20px;color:#666;font-size:14px;">本次实验沿用达人筛选的四象限分类标准（参考<a href="https://km.sankuai.com/collabpage/2772054152" target="_blank" style="color:var(--blue);">《AI选号实验复盘》</a>），以CPM（传播效率）和ROI（业务转化）两个维度划分达人：</p>
+    <div style="position:relative;margin-bottom:16px;padding-left:60px;padding-top:36px;">
+      <!-- 顶部横向标签 -->
+      <div style="position:absolute;top:0;left:60px;right:0;display:flex;gap:8px;">
+        <div style="flex:1;text-align:center;padding:6px 0;">
+          <div style="font-size:13px;color:#333;font-weight:700;">低CPM（≤57.6）</div>
+          <div style="font-size:12px;color:#999;margin-top:2px;">传播效率高</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:6px 0;">
+          <div style="font-size:13px;color:#333;font-weight:700;">高CPM（＞57.6）</div>
+          <div style="font-size:12px;color:#999;margin-top:2px;">传播效率低</div>
+        </div>
       </div>
-      <div style="background:var(--blue-bg);border-radius:12px;padding:16px;border-left:4px solid var(--blue);">
-        <div style="font-weight:700;color:var(--blue);font-size:15px;margin-bottom:6px;">🎯 精准触达型</div>
-        <div style="font-size:13px;color:#333;line-height:1.6;">曝光面窄，但受众高度精准<br>GTV转化率强，核心粉丝价值高</div>
+      <!-- 左侧纵向标签 -->
+      <div style="position:absolute;left:0;top:36px;bottom:0;display:flex;flex-direction:column;gap:8px;width:52px;">
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center;">
+          <div>
+            <div style="font-size:13px;color:#333;font-weight:700;">高ROI</div>
+            <div style="font-size:12px;color:#999;">≥9.1</div>
+            <div style="font-size:11px;color:#999;margin-top:2px;">转化效率高</div>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center;">
+          <div>
+            <div style="font-size:13px;color:#333;font-weight:700;">低ROI</div>
+            <div style="font-size:12px;color:#999;">＜9.1</div>
+            <div style="font-size:11px;color:#999;margin-top:2px;">转化效率低</div>
+          </div>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;color:#666;font-weight:600;">低ROI<br>（＜9.1）<br><span style="font-weight:400;font-size:12px;">转化效率低</span></div>
-      <div style="background:var(--orange-bg);border-radius:12px;padding:16px;border-left:4px solid var(--orange);">
-        <div style="font-weight:700;color:var(--orange);font-size:15px;margin-bottom:6px;">📢 曝光型</div>
-        <div style="font-size:13px;color:#333;line-height:1.6;">内容传播效率高但转化率低<br>有量无转化</div>
+      <!-- 四象限卡片 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:var(--green-bg);border-radius:12px;padding:16px;border-top:3px solid var(--green);border-left:3px solid var(--green);position:relative;">
+          <div style="position:absolute;top:8px;right:10px;font-size:20px;opacity:0.3;">⭐</div>
+          <div style="font-weight:700;color:var(--green);font-size:15px;margin-bottom:6px;">明星达人</div>
+          <div style="font-size:13px;color:#333;line-height:1.6;">传播效率高 × 转化效率高<br>两者兼顾的理想达人</div>
+        </div>
+        <div style="background:var(--blue-bg);border-radius:12px;padding:16px;border-top:3px solid var(--blue);border-right:3px solid var(--blue);position:relative;">
+          <div style="position:absolute;top:8px;right:10px;font-size:20px;opacity:0.3;">🎯</div>
+          <div style="font-weight:700;color:var(--blue);font-size:15px;margin-bottom:6px;">精准触达型</div>
+          <div style="font-size:13px;color:#333;line-height:1.6;">曝光面窄，但受众高度精准<br>GTV转化率强，核心粉丝价值高</div>
+        </div>
+        <div style="background:var(--orange-bg);border-radius:12px;padding:16px;border-bottom:3px solid var(--orange);border-left:3px solid var(--orange);position:relative;">
+          <div style="position:absolute;top:8px;right:10px;font-size:20px;opacity:0.3;">📢</div>
+          <div style="font-weight:700;color:var(--orange);font-size:15px;margin-bottom:6px;">曝光型</div>
+          <div style="font-size:13px;color:#333;line-height:1.6;">内容传播效率高但转化率低<br>有量无转化</div>
+        </div>
+        <div style="background:var(--red-bg);border-radius:12px;padding:16px;border-bottom:3px solid var(--red);border-right:3px solid var(--red);position:relative;">
+          <div style="position:absolute;top:8px;right:10px;font-size:20px;opacity:0.3;">❌</div>
+          <div style="font-weight:700;color:var(--red);font-size:15px;margin-bottom:6px;">无效达人</div>
+          <div style="font-size:13px;color:#333;line-height:1.6;">曝光贵且无转化<br>双重失效</div>
+        </div>
       </div>
-      <div style="background:var(--red-bg);border-radius:12px;padding:16px;border-left:4px solid var(--red);">
-        <div style="font-weight:700;color:var(--red);font-size:15px;margin-bottom:6px;">❌ 无效达人</div>
-        <div style="font-size:13px;color:#333;line-height:1.6;">曝光贵且无转化<br>双重失效</div>
-      </div>
+      <!-- 中心交叉点装饰 -->
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:#fff;border:2px solid #ddd;border-radius:50%;z-index:10;"></div>
     </div>
     <p style="margin-bottom:20px;color:#999;font-size:12px;">* 分层阈值：以中位数切割，CPM中位数=57.6，ROI中位数=9.1</p>
     <p style="margin-bottom:12px;color:#666;font-size:14px;">在此分类框架下，AI组与人工组的达人结构对比如下：</p>
